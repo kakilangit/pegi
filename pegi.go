@@ -25,11 +25,11 @@ type DB struct {
 	txOptions *sql.TxOptions
 }
 
-// Transactioner is transaction runner.
+// TransactionRunner is transaction runner.
 //
-// A transaction abstraction without exposing database or library implementation details.
+// A transaction abstraction without exposing database or library implementation details and reducing cognitive load using closure.
 //
-// This abstraction helps CPS build deep modules.
+// This abstraction can be used to build deep modules.
 //
 // See how:
 //
@@ -50,7 +50,7 @@ type DB struct {
 // 		}
 //
 // 		type BusinessLogic struct {
-// 			Transactioner
+// 			TransactionRunner
 // 			repo      Repository
 // 			publisher Publisher
 // 		}
@@ -83,13 +83,13 @@ type DB struct {
 //
 // "The module should be deep." ~ John Ousterhout's A Philosophy of Software Design
 //
-type Transactioner interface {
+type TransactionRunner interface {
 	RunInTransaction(ctx context.Context, f TxFunc) error
 }
 
-// LiteralTransactioner is abstraction of transaction without closure.
+// Transactioner is abstraction of transaction without closure.
 // with this abstraction the caller need to write transaction boilerplate in order to avoid closure.
-type LiteralTransactioner interface {
+type Transactioner interface {
 	Begin(ctx context.Context) (context.Context, error)
 	Rollback(ctx context.Context) error
 	Commit(ctx context.Context) error
