@@ -1,7 +1,7 @@
 # Pegi
 
 [![PkgGoDev](https://pkg.go.dev/badge/github.com/kakilangit/pegi)](https://pkg.go.dev/github.com/kakilangit/pegi)
-[![Build Status](https://travis-ci.org/kakilangit/pegi.svg?branch=main)](https://travis-ci.org/kakilangit/pegi)
+[![Build Status](https://app.travis-ci.com/kakilangit/pegi.svg?branch=main)](https://app.travis-ci.com/github/kakilangit/pegi)
 
 
 A sqlx wrapper mainly for PostgreSQL.
