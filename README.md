@@ -28,7 +28,7 @@ func main() {
 	db := pegi.NewDB(&sqlx.DB{}, &sql.TxOptions{})
 	if err := db.RunInTransaction(context.Background(), func(ctx context.Context) error {
 		var id string
-		if err := db.GetAccessor(ctx).Get(&id, "SELECT id FROM users WHERE name = ?", "name"); err != nil {
+		if err := db.GetAccess(ctx).Get(&id, "SELECT id FROM users WHERE name = ?", "name"); err != nil {
 			return err
 		}
 
