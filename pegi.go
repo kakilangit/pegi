@@ -222,18 +222,23 @@ type Accessor interface {
 	NamedExec(query string, arg interface{}) (sql.Result, error)
 }
 
-// GetAccessor will get Accessor interface from context.
-func (db DB) GetAccessor(ctx context.Context) Accessor {
-	if tx, err := GetTransaction(ctx); err == nil {
-		return tx
-	}
-
-	return db.DB
+// Access implements Accessor.
+type Access struct {
+	Accessor
 }
 
-// A is shorter method for GetAccessor
-func (db DB) A(ctx context.Context) Accessor {
-	return db.GetAccessor(ctx)
+// GetAccess will get Accessor interface from context.
+func (db DB) GetAccess(ctx context.Context) Access {
+	if tx, err := GetTransaction(ctx); err == nil {
+		return Access{tx}
+	}
+
+	return Access{db.DB}
+}
+
+// A is shorter method for GetAccess
+func (db DB) A(ctx context.Context) Access {
+	return db.GetAccess(ctx)
 }
 
 // QueryBuilder is PostgreSQL wrapper for squirrel.
@@ -259,7 +264,7 @@ func (db DB) A(ctx context.Context) Accessor {
 //		fmt.Println(result)
 //
 func (db DB) QueryBuilder(ctx context.Context) squirrel.StatementBuilderType {
-	return squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar).RunWith(db.GetAccessor(ctx))
+	return squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar).RunWith(db.GetAccess(ctx).Accessor)
 }
 
 // Q is shorter method for QueryBuilder
